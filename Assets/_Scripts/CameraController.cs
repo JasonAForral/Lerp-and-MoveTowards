@@ -11,6 +11,7 @@ public class CameraController : MonoBehaviour {
     public float mouseSlideSpeed = 1f;
     public float keyboardSlideSpeed = 1f;
     public float zoomSpeed = 50f;
+    public float panSpeed = 1f;
 
 	// Use this for initialization
 	void Awake () {
@@ -26,7 +27,7 @@ public class CameraController : MonoBehaviour {
     {
         if (Input.GetButton("Fire2"))
         {
-            transform.Translate(-1.0f * mouseSlideSpeed * new Vector3(Input.GetAxis("Mouse X"), 0.0f, Input.GetAxis("Mouse Y")));
+            transform.Translate(-1.0f * panSpeed * mouseSlideSpeed * new Vector3(Input.GetAxis("Mouse X"), 0.0f, Input.GetAxis("Mouse Y")));
         }
 
         if (Input.GetButton("Fire3"))
@@ -37,10 +38,11 @@ public class CameraController : MonoBehaviour {
 
         }
 
-        transform.Translate(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical") * keyboardSlideSpeed);
+        transform.Translate(new Vector3(Input.GetAxis("Horizontal"), 0.0f, Input.GetAxis("Vertical")) * panSpeed * keyboardSlideSpeed);
 
         cameraZoom.Translate(Vector3.forward * Input.GetAxis("Mouse ScrollWheel") * zoomSpeed);
         cameraZoom.localPosition = Vector3.forward * Mathf.Round(Mathf.Clamp(cameraZoom.localPosition.z, -110f, -10f));
+        panSpeed =  -cameraZoom.localPosition.z * 0.05f;
 
     }
 }
